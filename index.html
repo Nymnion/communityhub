@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NymN's Community Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #002244, #4a148c, #ff8c00);
+            background-size: 100% 100vh;
+            background-attachment: fixed;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Adding a more pronounced pattern overlay on top of the gradient */
+        .pattern-overlay {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/shattered.png');
+            opacity: 0.45;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .header {
+            background-color: #003366;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .game-section-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-section {
+            padding: 0 40px;
+        }
+
+        .game-banner {
+            position: relative;
+            color: #ffffff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            box-shadow: 0 4px 0px rgba(0, 0, 0, 0.7);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .game-banner.active {
+            border: 3px solid #008080; /* Changed to teal color */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            transition: transform 0.5s ease-out;
+            transform: skewX(-30deg);
+        }
+
+        .game-banner:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .game-banner:hover::before {
+            transform: translateX(100%);
+        }
+
+        .game-banner::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+            z-index: 2;
+            opacity: 0.5;
+        }
+
+        .banner-header {
+            position: relative;
+            font-size: 1.8em;
+            font-weight: 700;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 3;
+        }
+
+        .game-info {
+            display: none;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0px rgba(0, 0, 0, 0.7);
+            animation: dropdownPanel 0.4s ease;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .game-info p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .carousel img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 8px;
+        }
+
+        .expandable-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .expandable-image:hover {
+            transform: scale(1.05);
+        }
+
+        .join-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 20px;
+            background-color: #ff6f00;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: 700;
+        }
+
+        .join-link:hover {
+            background-color: #cc5800;
+        }
+
+        @keyframes dropdownPanel {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Pattern Overlay -->
+    <div class="pattern-overlay"></div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">NymN's Community Hub</div>
+    </header>
+
+    <!-- Game Communities Section Container -->
+    <div class="game-section-container">
+        <main class="game-section">
+            <div class="game-banner" id="wow-banner" onclick="toggleGameInfo('wow-info')" style="background-image: url('assets/wow.png'); background-position: center 20%;">
+                <div class="banner-header">World of Warcraft</div>
+            </div>
+            <div class="game-info" id="wow-info">
+                <p><strong>Retail Community</strong> - <a href="https://worldofwarcraft.blizzard.com/en-gb/invite/Vxdm0xbUYBv">Join here</a></p>
+                <hr>
+                <p><strong>&lt;ta&gt;</strong> is our guild, open to anyone who wishes to join. Currently progressing at 6/8HC. To join, search for "nymn" in the Guild Finder and apply. If you're Alliance, please ping @Fawcan to get an invite (requires adding you on Battle.net).</p>
+                <hr>
+                <p><strong>&lt;buh&gt;</strong> is our SoD guild, on Living Flame EU - Horde.</p>
+                <img src="assets/ta.png" alt="World of Warcraft Guild Image" class="expandable-image" onclick="openImageModal('assets/ta.png')">
+            </div>
+
+            <div class="game-banner" id="ea-banner" onclick="toggleGameInfo('ea-info')" style="background-image: url('assets/fc25.png'); background-position: center 20%;">
+                <div class="banner-header">EA FC25</div>
+            </div>
+            <div class="game-info" id="ea-info">
+                <p><strong>Nammers United</strong> is looking for players for EA FC25 Pro Clubs. We play nearly every evening with a full 11 players. If you want to join one of the top FC25 teams and help us beat Erobb's team again, message @noexinwhy on Discord or check out the Nammers United channels in Nymn's Discord server.</p>
+                <img src="assets/nammers.png" alt="Nammers United FC25 Team Image" class="expandable-image" onclick="openImageModal('assets/nammers.png')">
+            </div>
+
+            <div class="game-banner" id="stfc-banner" onclick="toggleGameInfo('stfc-info')" style="background-image: url('assets/stfc.png'); background-position: center 50%;">
+                <div class="banner-header">Star Trek: Fleet Command</div>
+            </div>
+            <div class="game-info" id="stfc-info">
+                <p>Join the alliance and explore the galaxy with us! Our alliance, <strong>[NAM] Dock Like Plumbers</strong>, is open to everyone.</p>
+                <p><strong>Universe:</strong> EU - 134 Tucker</p>
+                <p>The game is free to play, and anyone looking to join can get the game at this partnered link: <a href="https://strms.net/startrek_nymn">Start Your Journey Here</a></p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Image Modal (Hidden by Default) -->
+    <div id="image-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 10; align-items: center; justify-content: center;">
+        <img id="modal-image" src="" style="max-width: 90%; max-height: 90%; border-radius: 10px;">
+    </div>
+
+    <script>
+        function toggleGameInfo(infoId) {
+            const infoElement = document.getElementById(infoId);
+            const allGameInfos = document.querySelectorAll('.game-info');
+            const allGameBanners = document.querySelectorAll('.game-banner');
+
+            allGameInfos.forEach(element => {
+                if (element !== infoElement) {
+                    element.style.display = 'none';
+                }
+            });
+
+            allGameBanners.forEach(banner => {
+                banner.classList.remove('active');
+            });
+
+            if (infoElement.style.display === 'none' || infoElement.style.display === '') {
+                infoElement.style.display = 'block';
+                document.getElementById(infoId.replace('-info', '-banner')).classList.add('active');
+            } else {
+                infoElement.style.display = 'none';
+            }
+        }
+
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            modalImage.src = imageSrc;
+            modal.style.display = 'flex';
+            modal.onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
+    </script>
+</body>
+</html>
